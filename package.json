@@ -1,0 +1,19 @@
+{
+  "name": "citiesfight",
+  "version": "1.0.0",
+  "description": "For working with this app basically put two names of the cities you population of which you want to compare and see the result.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GMatorin/CitiesFight.git"
+  },
+  "author": "GMatorin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GMatorin/CitiesFight/issues"
+  },
+  "homepage": "https://github.com/GMatorin/CitiesFight#readme"
+}
