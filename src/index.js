@@ -7,15 +7,18 @@ const suggestions = document.querySelectorAll('.suggestions');
 const fightButton = document.getElementById('fight-btn');
 const progressSection = document.querySelector('.progress');
 const progressBar = document.querySelector('.progress-bar');
-let firstCity = '';
-let secondCity = '';
 /* Get the cities info from the API */
 getCities();
 
 fightButton.addEventListener('click', buttonHandle);
 
-searches.forEach(search => search.addEventListener('change', displayMatches));
-searches.forEach(search => search.addEventListener('keyup', displayMatches));
+searches.forEach(search => search.addEventListener('input', displayMatches));
+//searches.forEach(search => search.addEventListener('keyup', displayMatches));
+searches.forEach(search =>
+  search.addEventListener('click', () =>
+    search.nextElementSibling.classList.remove('d-none')
+  )
+);
 
 /* Getting the data of cities  */
 async function getCities() {
@@ -29,22 +32,24 @@ function buttonHandle(e) {
 
   showResult();
 }
-/*
+
 function showResult() {
-  console.log(firstCity);
-  console.log(secondCity);
+  let firstCity = '';
+  let secondCity = '';
 
   let partial = () =>
-    firstCity.population > secondCity.population
+    firstCity.population > secondCity.population ? true : false;
+  /*
       ? secondCity.population / firstCity.population
-      : firstCity.population / secondCity.population;
-
-  const cityComparison = partial();
+      : firstCity.population / secondCity.population*/ const cityComparison = partial();
+  console.log(cityComparison);
+  /*
   const percentInfo = (cityComparison * 100).toFixed(2);
   console.log(percentInfo);
   progressBar.style.width = `${percentInfo}` + '%';
+  */
 }
-*/
+
 function findMatches(wordToMatch, cities) {
   return cities.filter(place => {
     // here we need to return only a city which is matching with the searched word
@@ -57,7 +62,9 @@ function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-function displayMatches() {
+function displayMatches(e) {
+  // Prevent refresh of the suggestions if keyUp or keyDown for navigation is pressed
+  if (e.keyCode === 40 || e.keyCode === 38) return false;
   const matchArray = findMatches(this.value, cities);
 
   const html = matchArray
@@ -76,6 +83,9 @@ function displayMatches() {
     })
     .join('');
 
+  searches.forEach(search =>
+    search.addEventListener('keydown', navigateSuggestions)
+  );
   if (this.classList.contains('search-1')) {
     suggestions[0].classList.remove('d-none');
     suggestions[0].innerHTML = html;
@@ -101,4 +111,47 @@ function displayMatches() {
   }
 }
 
-function clearSuggestions() {}
+function navigateSuggestions(e) {
+  const ul = this.nextElementSibling;
+  let suggestionActive = ul.querySelector('.suggestion-active');
+  if (e.keyCode === 40) {
+    if (suggestionActive == null) {
+      suggestionActive = ul.firstElementChild;
+      suggestionActive.classList.add('suggestion-active');
+    } else {
+      suggestionActive.classList.remove('suggestion-active');
+      suggestionActive = suggestionActive.nextElementSibling;
+      suggestionActive.classList.add('suggestion-active');
+    }
+  } else if (e.keyCode === 38) {
+    if (suggestionActive != null) {
+      suggestionActive.classList.remove('suggestion-active');
+      suggestionActive = suggestionActive.previousElementSibling;
+      suggestionActive.classList.add('suggestion-active');
+    }
+  }
+  suggestionActive.addEventListener(
+    'keydown',
+    suggestionSelect(e, this, suggestionActive, ul)
+  );
+}
+
+function suggestionSelect(e, searchActive, suggestionActive, ul) {
+  if (e.keyCode === 13) {
+    searchActive.value = toTitleCase(
+      suggestionActive.firstElementChild.innerText
+    );
+    ul.classList.add('d-none');
+  }
+
+  searchActive.removeEventListener(
+    'keydown',
+    suggestionSelect(e, searchActive, suggestionActive)
+  );
+}
+
+function toTitleCase(str) {
+  return str.replace(/\w\S*/g, function(txt) {
+    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+  });
+}

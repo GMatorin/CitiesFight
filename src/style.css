@@ -43,3 +43,7 @@ span.name {
 .hl {
     background: #ffc600;
 }
+
+.suggestion-active {
+    background: #FFE0B5 !important;
+}
