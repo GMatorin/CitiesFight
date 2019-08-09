@@ -7,6 +7,9 @@ const suggestions = document.querySelectorAll('.suggestions');
 const fightButton = document.getElementById('fight-btn');
 const progressSection = document.querySelector('.progress');
 const progressBar = document.querySelector('.progress-bar');
+
+let firstPopulation = 0;
+let secondPopulation = 0;
 /* Get the cities info from the API */
 getCities();
 
@@ -34,20 +37,42 @@ function buttonHandle(e) {
 }
 
 function showResult() {
+  let percent = 0;
+  let partial = 0;
   let firstCity = '';
   let secondCity = '';
 
-  let partial = () =>
-    firstCity.population > secondCity.population ? true : false;
-  /*
-      ? secondCity.population / firstCity.population
-      : firstCity.population / secondCity.population*/ const cityComparison = partial();
-  console.log(cityComparison);
-  /*
-  const percentInfo = (cityComparison * 100).toFixed(2);
-  console.log(percentInfo);
-  progressBar.style.width = `${percentInfo}` + '%';
-  */
+  if (firstPopulation === 0) {
+    firstPopulation = getPopulation(searches[0].value);
+  }
+  if (secondPopulation === 0) {
+    secondPopulation = getPopulation(searches[1].value);
+  }
+
+  partial = Number(firstPopulation) / Number(secondPopulation);
+  percent = partial;
+  if (percent >= 1) {
+    percent = 1 / percent;
+    firstCity = searches[1].value;
+    secondCity = searches[0].value;
+  } else {
+    //percent = 1 - percent;
+    firstCity = searches[0].value;
+    secondCity = searches[1].value;
+  }
+  percent = (percent * 100).toFixed(2);
+  partial = partial.toFixed(2);
+
+  progressBar.style.width = `${percent}` + '%';
+
+  document.querySelector('.first-city').innerText = `${firstCity}`;
+  document.querySelector('.second-city').innerText = `${secondCity}`;
+  document.querySelector('.results').innerText =
+    `${searches[0].value}` +
+    ' is ' +
+    `${partial}` +
+    ' sizes of ' +
+    `${searches[1].value}`;
 }
 
 function findMatches(wordToMatch, cities) {
@@ -93,20 +118,12 @@ function displayMatches(e) {
     if (this.value === '') {
       suggestions[0].classList.add('d-none');
     }
-
-    if (matchArray.length === 1) {
-      firstCity = matchArray[0];
-    }
   } else {
     suggestions[1].classList.remove('d-none');
     suggestions[1].innerHTML = html;
 
     if (this.value === '') {
       suggestions[1].classList.add('d-none');
-    }
-
-    if (matchArray.length === 1) {
-      secondCity = matchArray[0];
     }
   }
 }
@@ -137,17 +154,29 @@ function navigateSuggestions(e) {
 }
 
 function suggestionSelect(e, searchActive, suggestionActive, ul) {
+  let cityName = '';
   if (e.keyCode === 13) {
-    searchActive.value = toTitleCase(
-      suggestionActive.firstElementChild.innerText
-    );
+    cityName = toTitleCase(suggestionActive.firstElementChild.innerText);
+    searchActive.value = cityName;
     ul.classList.add('d-none');
+
+    if (searchActive.classList.contains('search-1')) {
+      firstPopulation = getPopulation(cityName);
+    } else {
+      secondPopulation = getPopulation(cityName);
+    }
   }
 
   searchActive.removeEventListener(
     'keydown',
     suggestionSelect(e, searchActive, suggestionActive)
   );
+}
+
+function getPopulation(cityName) {
+  const cityObj = findMatches(cityName, cities);
+
+  return cityObj[0].population;
 }
 
 function toTitleCase(str) {
