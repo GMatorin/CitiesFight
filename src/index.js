@@ -39,7 +39,7 @@ function showResult() {
   let partial = 0;
   let secondCity = searches[1].value;
   let firstCity = searches[0].value;
-
+  //.value.split(',')[0];
   firstPopulation = getPopulation(searches[0]);
   secondPopulation = getPopulation(searches[1]);
 
@@ -74,8 +74,18 @@ function showResult() {
 function findMatches(wordToMatch, cities) {
   return cities.filter(place => {
     // here we need to return only a city which is matching with the searched word
-    const regex = new RegExp(wordToMatch, 'gi');
-    return place.city.match(regex);
+    if (wordToMatch.includes(',')) {
+      const placeArr = [...wordToMatch.split(', ')];
+      const cityRegex = new RegExp(placeArr[0], 'gi');
+      const stateRegex = new RegExp(placeArr[1], 'gi');
+      const retArr =
+        place.city.match(cityRegex) && place.state.match(stateRegex);
+      return retArr;
+    } else {
+      const cityRegex = new RegExp(wordToMatch, 'gi');
+      const retArr = place.city.match(cityRegex);
+      return retArr;
+    }
   });
 }
 
@@ -95,9 +105,13 @@ function displayMatches(e) {
         regex,
         `<span class="hl">${this.value}</span>`
       );
+      const stateName = place.state.replace(
+        regex,
+        `<span class="hl">${this.value}</span>`
+      );
       return `
   <li>
-    <span class="name">${cityName}</span>
+    <span class="name">${cityName}, ${stateName}</span>
     <span class="population">${numberWithCommas(place.population)}</span>
   </li>
 `;
@@ -187,7 +201,7 @@ function getPopulation(search) {
     return NaN;
   } else if (cityObj.length === 1) {
     // Make sure that the name of the city is spelled entirely in the search field
-    search.value = cityObj[0].city;
+    search.value = cityObj[0].city + ', ' + cityObj[0].state;
   }
   return cityObj[0].population;
 }
