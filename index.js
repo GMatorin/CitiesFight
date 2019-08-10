@@ -46,9 +46,13 @@ function showResult() {
   percent = Number(firstPopulation) / Number(secondPopulation);
   partial = percent.toFixed(2);
   if (percent >= 1) {
-    percent = 1 / percent;
+    // For weighted visualisation
+    percent = 1 / (percent + 1);
     firstCity = searches[1].value;
     secondCity = searches[0].value;
+  } else if (percent <= 1 && percent > 0) {
+    // For weighted visualisation
+    percent = 1 / (1 / percent + 1);
   } else if (isNaN(percent)) {
     alert('Put correct city names!');
     return;
