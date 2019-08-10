@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Architects+Daughter&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+
+    <title>CitiesFight</title>
+  </head>
+  <body>
+    <div class="bg-dark text-center text-white p-3">
+      <h1>Welcome To CitiesFight!</h1>
+      <br />
+      <h3>Here you can compare sizes of US cities</h3>
+    </div>
+
+    <div class="container">
+      <h2 class="text-center p-5">Put City Names To Compare</h2>
+
+      <form class="row">
+        <div class="form-group text-center col-md-5">
+          <label class="h4">City #1</label>
+          <input
+            type="text"
+            name="city1"
+            id="city1"
+            class="form-control search-1 search"
+            placeholder="City name"
+          />
+          <ul class="suggestions-1 d-none suggestions">
+            <li>Filter for a city</li>
+          </ul>
+        </div>
+
+        <div class="form-group col-md-2 d-flex flex-column  align-items-center">
+          <label class="h4">VS</label>
+          <button id="fight-btn" class="btn btn-primary w-50" type="button">
+            Fight!
+          </button>
+        </div>
+
+        <div class="form-group text-center col-md-5">
+          <label class="h4">City #2</label>
+          <input
+            type="text"
+            name="city2"
+            id="city2"
+            class="form-control search-2 search"
+            placeholder="City name"
+          />
+          <ul class="suggestions-2 d-none suggestions">
+            <li>Filter for a city</li>
+          </ul>
+        </div>
+      </form>
+
+      <br />
+      <div class="container text-center">
+        <h2 class="results"></h2>
+      </div>
+      <br />
+
+      <div class="container d-flex flex-row justify-content-between">
+        <h3 class="first-city"></h3>
+        <h3 class="second-city"></h3>
+      </div>
+      <div class="progress d-none">
+        <div
+          class="progress-bar progress-bar-striped progress-bar-animated"
+          style="width:0%;"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <script src="index.js"></script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
