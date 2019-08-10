@@ -16,7 +16,6 @@ getCities();
 fightButton.addEventListener('click', buttonHandle);
 
 searches.forEach(search => search.addEventListener('input', displayMatches));
-//searches.forEach(search => search.addEventListener('keyup', displayMatches));
 searches.forEach(search =>
   search.addEventListener('click', () =>
     search.nextElementSibling.classList.remove('d-none')
@@ -39,8 +38,8 @@ function buttonHandle(e) {
 function showResult() {
   let percent = 0;
   let partial = 0;
-  let firstCity = '';
-  let secondCity = '';
+  let firstCity = searches[0].value;
+  let secondCity = searches[1].value;
 
   if (firstPopulation === 0) {
     firstPopulation = getPopulation(searches[0].value);
@@ -50,16 +49,12 @@ function showResult() {
   }
 
   partial = Number(firstPopulation) / Number(secondPopulation);
-  percent = partial;
-  if (percent >= 1) {
-    percent = 1 / percent;
+  if (partial >= 1) {
+    percent = 1 / partial;
     firstCity = searches[1].value;
     secondCity = searches[0].value;
-  } else {
-    //percent = 1 - percent;
-    firstCity = searches[0].value;
-    secondCity = searches[1].value;
   }
+
   percent = (percent * 100).toFixed(2);
   partial = partial.toFixed(2);
 
@@ -67,10 +62,12 @@ function showResult() {
 
   document.querySelector('.first-city').innerText = `${firstCity}`;
   document.querySelector('.second-city').innerText = `${secondCity}`;
-  document.querySelector('.results').innerText =
+  document.querySelector('.results').innerHTML =
     `${searches[0].value}` +
     ' is ' +
+    '<span class="text-success">' +
     `${partial}` +
+    '</span>' +
     ' sizes of ' +
     `${searches[1].value}`;
 }
@@ -129,6 +126,7 @@ function displayMatches(e) {
 }
 
 function navigateSuggestions(e) {
+  const searchActive = this;
   const ul = this.nextElementSibling;
   let suggestionActive = ul.querySelector('.suggestion-active');
   if (e.keyCode === 40) {
@@ -140,17 +138,21 @@ function navigateSuggestions(e) {
       suggestionActive = suggestionActive.nextElementSibling;
       suggestionActive.classList.add('suggestion-active');
     }
+
+    searchActive.addEventListener('keydown', e =>
+      suggestionSelect(e, searchActive, suggestionActive, ul)
+    );
   } else if (e.keyCode === 38) {
     if (suggestionActive != null) {
       suggestionActive.classList.remove('suggestion-active');
       suggestionActive = suggestionActive.previousElementSibling;
       suggestionActive.classList.add('suggestion-active');
     }
+
+    searchActive.addEventListener('keydown', e =>
+      suggestionSelect(e, searchActive, suggestionActive, ul)
+    );
   }
-  suggestionActive.addEventListener(
-    'keydown',
-    suggestionSelect(e, this, suggestionActive, ul)
-  );
 }
 
 function suggestionSelect(e, searchActive, suggestionActive, ul) {
@@ -165,11 +167,13 @@ function suggestionSelect(e, searchActive, suggestionActive, ul) {
     } else {
       secondPopulation = getPopulation(cityName);
     }
-  }
 
-  searchActive.removeEventListener(
-    'keydown',
-    suggestionSelect(e, searchActive, suggestionActive)
+    searches.forEach(search =>
+      search.removeEventListener('keydown', navigateSuggestions)
+    );
+  }
+  searchActive.removeEventListener('keydown', e =>
+    suggestionSelect(e, searchActive, suggestionActive, ul)
   );
 }
 
