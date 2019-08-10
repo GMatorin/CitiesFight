@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "For working with this app basically put two names of the cities you population of which you want to compare and see the result.",
   "main": "index.js",
+  "homepage": "https://github.com/GMatorin/CitiesFight#readme",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "gh-pages -d src"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,7 @@
   "bugs": {
     "url": "https://github.com/GMatorin/CitiesFight/issues"
   },
-  "homepage": "https://github.com/GMatorin/CitiesFight#readme"
+  "dependencies": {
+    "gh-pages": "^2.1.1"
+  }
 }
