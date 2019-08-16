@@ -200,10 +200,10 @@ function getPopulation(search) {
   const cityName = search.value;
   const cityObj = findMatches(cityName, cities);
 
-  if (cityObj.length > 1 || cityObj.length === 0) {
+  if (cityObj.length === 0) {
     // Return NaN as error code
     return NaN;
-  } else if (cityObj.length === 1) {
+  } else if (cityObj.length === 1 || cityObj.length > 1) {
     // Make sure that the name of the city is spelled entirely in the search field
     search.value = cityObj[0].city + ', ' + cityObj[0].state;
   }
