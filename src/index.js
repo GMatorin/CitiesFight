@@ -162,6 +162,11 @@ function displayMatches(e) {
       suggestions[1].classList.add('d-none');
     }
   }
+  const suggestionList = document.querySelectorAll('li');
+
+  suggestionList.forEach(suggestionItem =>
+    suggestionItem.addEventListener('click', handleClick)
+  );
 }
 
 function navigateSuggestions(e) {
@@ -236,4 +241,15 @@ function toTitleCase(str) {
   return str.replace(/\w\S*/g, function(txt) {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
+}
+
+function handleClick() {
+  const ul = this.parentElement;
+  if (ul.classList.contains('suggestions-1')) {
+    searches[0].value = this.firstElementChild.innerText;
+    ul.classList.add('d-none');
+  } else {
+    searches[1].value = this.firstElementChild.innerText;
+    ul.classList.add('d-none');
+  }
 }
